@@ -32,27 +32,22 @@ export default defineConfig((config) => {
       target: 'esnext',
       chunkSizeWarningLimit: 5000,
       rollupOptions: {
+        input: {
+          main: 'app/entry.client.tsx'
+        },
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              // Group CodeMirror modules
-              if (id.includes('@codemirror')) {
-                const module = id.match(/@codemirror\/([^/]+)/)?.[1];
-                return module ? `codemirror.${module}` : 'codemirror.other';
-              }
-              // Split React ecosystem
-              if (id.includes('react-dom')) return 'react.dom';
-              if (id.includes('react')) return 'react.core';
-              // Split Remix modules
-              if (id.includes('@remix-run')) {
-                const module = id.match(/@remix-run\/([^/]+)/)?.[1];
-                return module ? `remix.${module}` : 'remix.other';
-              }
-              // UI component libraries
-              if (id.includes('@radix-ui')) return 'ui.radix';
-              if (id.includes('framer-motion')) return 'ui.framer';
-              // Default vendor chunk
-              return 'vendor';
+              // Core dependencies
+              if (id.includes('@codemirror')) return 'vendor.codemirror';
+              if (id.includes('react')) return 'vendor.react';
+              if (id.includes('@remix-run')) return 'vendor.remix';
+              if (id.includes('@radix-ui') || id.includes('framer-motion')) return 'vendor.ui';
+              return 'vendor.other';
+            }
+            // Route-based code splitting
+            if (id.includes('app/routes')) {
+              return id.match(/app\/routes\/([^/]+)/)?.[1] || 'routes';
             }
           }
         }
@@ -68,7 +63,8 @@ export default defineConfig((config) => {
           v3_fetcherPersist: true,
           v3_relativeSplatPath: true,
           v3_throwAbortReason: true,
-          v3_lazyRouteDiscovery: true
+          v3_lazyRouteDiscovery: true,
+          v3_singleFetch: true
         },
       }),
       UnoCSS(),
