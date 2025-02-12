@@ -1,9 +1,7 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "next.config.js",
-      "use": "@vercel/next"
-    }
-  ]
+  "framework": "vite",
+  "buildCommand": "vite build",
+  "devCommand": "vite",
+  "installCommand": "pnpm install",
+  "outputDirectory": "build/client"
 }
