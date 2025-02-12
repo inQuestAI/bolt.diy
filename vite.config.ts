@@ -41,7 +41,7 @@ export default defineConfig((config) => {
       nodePolyfills({
         include: ['path', 'buffer', 'process'],
       }),
-      config.mode !== 'test' && remixCloudflareDevProxy(),
+      config.mode !== 'test' && !process.env.VERCEL && remixCloudflareDevProxy(),
       remixVitePlugin({
         future: {
           v3_fetcherPersist: true,
