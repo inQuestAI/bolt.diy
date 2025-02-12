@@ -33,11 +33,13 @@ export default defineConfig((config) => {
       chunkSizeWarningLimit: 5000,
       rollupOptions: {
         output: {
-          manualChunks: {
-            'vendor-react': ['react', 'react-dom'],
-            'vendor-codemirror': ['@codemirror/state', '@codemirror/view'],
-            'vendor-ui': ['@radix-ui/react-dialog', 'framer-motion'],
-            'vendor-remix': ['@remix-run/react']
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('@codemirror')) return 'vendor-codemirror';
+              if (id.includes('@radix-ui')) return 'vendor-ui-radix';
+              if (id.includes('framer-motion')) return 'vendor-ui-framer';
+              return 'vendor-other';
+            }
           }
         }
       }
