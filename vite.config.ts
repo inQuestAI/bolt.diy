@@ -30,18 +30,22 @@ export default defineConfig((config) => {
     },
     build: {
       target: 'esnext',
+      chunkSizeWarningLimit: 2000,
       rollupOptions: {
         output: {
-          manualChunks: {
-            vendor: [
-              'react',
-              'react-dom',
-              '@remix-run/react',
-              'framer-motion',
-              '@codemirror/view',
-              '@codemirror/state',
-              '@codemirror/language'
-            ]
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('@codemirror')) {
+                return 'codemirror';
+              }
+              if (id.includes('react')) {
+                return 'react';
+              }
+              if (id.includes('@remix-run')) {
+                return 'remix';
+              }
+              return 'vendor';
+            }
           }
         }
       }
