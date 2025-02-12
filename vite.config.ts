@@ -31,18 +31,8 @@ export default defineConfig((config) => {
     build: {
       target: 'esnext',
       chunkSizeWarningLimit: 5000,
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              if (id.includes('@codemirror')) return 'vendor-codemirror';
-              if (id.includes('@radix-ui')) return 'vendor-ui-radix';
-              if (id.includes('framer-motion')) return 'vendor-ui-framer';
-              return 'vendor-other';
-            }
-          }
-        }
-      }
+      minify: true,
+      sourcemap: true
     },
     plugins: [
       nodePolyfills({
