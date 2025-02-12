@@ -34,6 +34,9 @@ export default defineConfig((config) => {
       minify: true,
       sourcemap: true
     },
+    ssr: {
+      external: ['react', 'react-dom', '@remix-run/react']
+    },
     plugins: [
       nodePolyfills({
         include: ['path', 'buffer', 'process'],
