@@ -30,20 +30,28 @@ export default defineConfig((config) => {
     },
     build: {
       target: 'esnext',
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 5000,
       rollupOptions: {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
+              // Group CodeMirror modules
               if (id.includes('@codemirror')) {
-                return 'codemirror';
+                const module = id.match(/@codemirror\/([^/]+)/)?.[1];
+                return module ? `codemirror.${module}` : 'codemirror.other';
               }
-              if (id.includes('react')) {
-                return 'react';
-              }
+              // Split React ecosystem
+              if (id.includes('react-dom')) return 'react.dom';
+              if (id.includes('react')) return 'react.core';
+              // Split Remix modules
               if (id.includes('@remix-run')) {
-                return 'remix';
+                const module = id.match(/@remix-run\/([^/]+)/)?.[1];
+                return module ? `remix.${module}` : 'remix.other';
               }
+              // UI component libraries
+              if (id.includes('@radix-ui')) return 'ui.radix';
+              if (id.includes('framer-motion')) return 'ui.framer';
+              // Default vendor chunk
               return 'vendor';
             }
           }
