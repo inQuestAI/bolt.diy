@@ -30,6 +30,21 @@ export default defineConfig((config) => {
     },
     build: {
       target: 'esnext',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: [
+              'react',
+              'react-dom',
+              '@remix-run/react',
+              'framer-motion',
+              '@codemirror/view',
+              '@codemirror/state',
+              '@codemirror/language'
+            ]
+          }
+        }
+      }
     },
     plugins: [
       nodePolyfills({
