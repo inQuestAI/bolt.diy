@@ -32,23 +32,12 @@ export default defineConfig((config) => {
       target: 'esnext',
       chunkSizeWarningLimit: 5000,
       rollupOptions: {
-        input: {
-          main: 'app/entry.client.tsx'
-        },
         output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              // Core dependencies
-              if (id.includes('@codemirror')) return 'vendor.codemirror';
-              if (id.includes('react')) return 'vendor.react';
-              if (id.includes('@remix-run')) return 'vendor.remix';
-              if (id.includes('@radix-ui') || id.includes('framer-motion')) return 'vendor.ui';
-              return 'vendor.other';
-            }
-            // Route-based code splitting
-            if (id.includes('app/routes')) {
-              return id.match(/app\/routes\/([^/]+)/)?.[1] || 'routes';
-            }
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom'],
+            'vendor-codemirror': ['@codemirror/state', '@codemirror/view'],
+            'vendor-ui': ['@radix-ui/react-dialog', 'framer-motion'],
+            'vendor-remix': ['@remix-run/react']
           }
         }
       }
