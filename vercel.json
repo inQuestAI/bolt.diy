@@ -1,27 +1,7 @@
 {
   "buildCommand": "pnpm run build",
-  "framework": null,
-  "outputDirectory": "build/client",
-  "functions": {
-    "api/**/*": {
-      "runtime": "edge",
-      "memory": 128,
-      "maxDuration": 10
-    }
-  },
-  "routes": [
-    {
-      "src": "/build/.*",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "_server.js"
-    }
-  ]
+  "devCommand": "pnpm run dev",
+  "framework": "remix",
+  "installCommand": "pnpm install",
+  "outputDirectory": "build/client"
 }
